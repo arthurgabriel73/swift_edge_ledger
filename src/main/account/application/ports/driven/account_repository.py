@@ -1,0 +1,21 @@
+from abc import ABC, abstractmethod
+
+from src.main.account.domain.account import Account
+from src.main.account.domain.account_id import AccountId
+from src.main.account.domain.account_number import AccountNumber
+
+
+class AccountRepository(ABC):
+    pass
+
+    @abstractmethod
+    def save(self, account: Account) -> None:
+        pass
+
+    @abstractmethod
+    def find_by_id(self, account_id: AccountId) -> Account:
+        pass
+
+    @abstractmethod
+    def find_by_account_number(self, account_number: AccountNumber) -> Account:
+        pass
