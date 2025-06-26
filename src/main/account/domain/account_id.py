@@ -5,4 +5,4 @@ class AccountId:
         self.id = account_id
 
     def string(self) -> str:
-        return str(self.id)
+        return self.id.hex
