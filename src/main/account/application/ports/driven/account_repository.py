@@ -9,7 +9,7 @@ class AccountRepository(ABC):
     pass
 
     @abstractmethod
-    def save(self, account: Account) -> None:
+    def save(self, account: Account) -> Account:
         pass
 
     @abstractmethod
