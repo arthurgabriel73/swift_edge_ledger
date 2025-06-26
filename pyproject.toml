@@ -1,0 +1,27 @@
+[tool.poetry]
+package-mode = false
+[project]
+name = "swift-edge-ledger"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "arthurgabriel73",email = "arthurgabriel73@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pytest (>=8.4.1,<9.0.0)",
+    "fastapi (>=0.115.14,<0.116.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "sqlalchemy (>=2.0.41,<3.0.0)",
+    "uvicorn (>=0.34.3,<0.35.0)",
+    "pytz (>=2025.2,<2026.0)",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+
