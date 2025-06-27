@@ -4,22 +4,23 @@ from sqlalchemy import Table
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from main.account.application.ports.driven.account_repository import AccountRepository
-from main.account.domain.account import Account
-from main.account.domain.account_id import AccountId
-from main.account.domain.account_number import AccountNumber
-from main.account.infra.adapters.driven.persistence.sqlalchemy.account_entity import AccountEntity
+from src.main.shared.database.sqlalchemy.models import AccountEntity
+from src.main.account.application.ports.driven.account_repository import AccountRepository
+from src.main.account.domain.account import Account
+from src.main.account.domain.account_id import AccountId
+from src.main.account.domain.account_number import AccountNumber
+from src.main.shared.persistence_decorators import repository
 
 
+@repository
 class SqlAlchemyAccountRepository(AccountRepository):
     def save(self, account: Account, session: Optional[Session] = None) -> Account:
         if session is None:
             raise ValueError("Session must be provided for saving the account.")
 
         account_entity = AccountEntity.from_domain(account)
-        session.add(account_entity.from_domain(account))
-        session.commit()
-        session.refresh(account_entity)
+        table = Table('accounts', AccountEntity.metadata)
+        session.execute(table.insert(), [account_entity.to_dict()])
         return account_entity.to_domain()
 
 

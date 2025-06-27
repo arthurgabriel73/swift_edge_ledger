@@ -6,7 +6,7 @@ from typing import Any, Callable, Type, TypeVar
 
 from sqlalchemy.orm import Session
 
-from src.main.shared.database_conn import SessionLocal
+from src.main.shared.database.sqlalchemy.database_conn import SessionLocal
 
 db_session_context = contextvars.ContextVar[Session | None]('db_session', default=None)
 

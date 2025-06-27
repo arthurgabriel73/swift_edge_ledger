@@ -1,5 +1,5 @@
-from main.account.domain.account_id import AccountId
-from main.account.domain.account_number import AccountNumber
+from src.main.account.domain.account_id import AccountId
+from src.main.account.domain.account_number import AccountNumber
 
 
 class SaveAccountCommandOutput:
