@@ -1,6 +1,6 @@
 class AccountNumber:
     def __init__(self, account_number: str):
-        self.account_number = account_number
+        self._value = account_number
 
-    def string(self) -> str:
-        return self.account_number
+    def value(self) -> str:
+        return self._value

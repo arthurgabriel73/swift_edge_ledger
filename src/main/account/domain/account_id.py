@@ -2,7 +2,8 @@ from uuid import UUID
 
 class AccountId:
     def __init__(self, account_id: UUID):
-        self.id = account_id
+        self._value = account_id
 
-    def string(self) -> str:
-        return self.id.hex
+    def value(self) -> UUID:
+        return self._value
+

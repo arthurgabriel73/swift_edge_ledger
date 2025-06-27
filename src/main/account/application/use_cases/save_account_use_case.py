@@ -14,9 +14,8 @@ class SaveAccountUseCase(SaveAccountDriverPort):
 
     def execute(self, command: SaveAccountCommand) -> SaveAccountCommandOutput:
         self._require_account_number_does_not_exist(command.account_number)
-        account = Account.create(AccountId(uuid.uuid4()), AccountNumber(command.account_number))
-        created_account = self.account_repository.save(account)
-        return SaveAccountCommandOutput(account_id=created_account.id.string(), account_number=created_account.account_number.account_number)
+        created_account: Account = self.account_repository.save(Account.create(AccountId(uuid.uuid4()), AccountNumber(command.account_number)))
+        return SaveAccountCommandOutput(created_account.id, created_account.account_number)
 
 
     def _require_account_number_does_not_exist(self, account_number: str):

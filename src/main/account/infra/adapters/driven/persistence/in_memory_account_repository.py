@@ -15,11 +15,11 @@ class InMemoryAccountRepository(AccountRepository):
         return self.to_new_instance(account)
 
     def find_by_id(self, account_id: AccountId) -> Optional[Account]:
-        found = next((account for account in self.accounts if account.id.string() == account_id.string()), None)
+        found = next((account for account in self.accounts if account.id.value() == account_id.value()), None)
         return self.to_new_instance(found) if found else None
 
     def find_by_account_number(self, account_number: AccountNumber) -> Optional[Account]:
-        found = next((account for account in self.accounts if account.account_number.string() == account_number.string()), None)
+        found = next((account for account in self.accounts if account.account_number.value() == account_number.value()), None)
         return self.to_new_instance(found) if found else None
 
     def to_new_instance(self, account: Account) -> Account:
