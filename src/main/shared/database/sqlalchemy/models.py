@@ -1,6 +1,7 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
+from src.main.merchant.domain.category import Category
 from src.main.merchant.domain.mcc import Mcc
 from src.main.merchant.domain.mcc_id import MccId
 from src.main.merchant.domain.merchant import Merchant
@@ -85,7 +86,7 @@ class MccEntity(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     code: Mapped[str] = mapped_column(nullable=False, unique=True)
-    category_id: Mapped[int] = mapped_column(nullable=False)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(nullable=False)
 
     def to_domain(self):
@@ -110,5 +111,38 @@ class MccEntity(Base):
             'id': str(self.id),
             'code': self.code,
             'category_id': self.category_id,
+            'created_at': self.created_at.isoformat()
+        }
+
+class CategoryEntity(Base):
+    __tablename__ = 'categories'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(nullable=False, unique=True)
+    description: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(nullable=False)
+
+    def to_domain(self):
+        return Category.from_value(
+            category_id=self.id,
+            code=self.code,
+            description=self.description,
+            created_at=self.created_at
+        )
+
+    @classmethod
+    def from_domain(cls, category) -> 'CategoryEntity':
+        return cls(
+            id=category.id,
+            code=category.code,
+            description=category.description,
+            created_at=category.created_at
+        )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'code': self.code,
+            'description': self.description,
             'created_at': self.created_at.isoformat()
         }
