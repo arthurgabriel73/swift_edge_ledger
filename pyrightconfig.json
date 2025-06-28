@@ -1,0 +1,10 @@
+{
+  "include": ["src", "scripts"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnusedImport": "none",
+  "useLibraryCodeForTypes": true
+}
