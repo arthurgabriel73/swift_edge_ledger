@@ -9,7 +9,7 @@ from src.main.activity.domain.activity_id import ActivityId
 class Activity:
     __allow_instantiation = False
 
-    def __init__(self, activity_id: ActivityId, timestamp: datetime.timestamp, account_id: UUID, amount_in_cents: int, category_id: int, merchant_id: UUID, status_id: Optional[int]):
+    def __init__(self, *, activity_id: ActivityId, timestamp: datetime.timestamp, account_id: UUID, amount_in_cents: int, category_id: int, merchant_id: Optional[UUID], status_id: Optional[int]):
         if not self.__allow_instantiation:
             raise RuntimeError('Use the create method to instantiate an Activity')
 
@@ -23,11 +23,11 @@ class Activity:
 
 
     @classmethod
-    def create(cls, activity_id: ActivityId, account_id: UUID, amount_in_cents: int, category_id: int, merchant_id: UUID) -> 'Activity':
+    def create(cls, *, activity_id: ActivityId, account_id: UUID, amount_in_cents: int, category_id: int, merchant_id: Optional[UUID]) -> 'Activity':
         cls.__allow_instantiation = True
-        return cls(activity_id, get_utc_now().timestamp(), account_id, amount_in_cents, category_id, merchant_id, None)
+        return cls(activity_id=activity_id, timestamp=get_utc_now().timestamp(), account_id=account_id, amount_in_cents=amount_in_cents, category_id=category_id, merchant_id=merchant_id, status_id=None)
 
     @classmethod
-    def from_value(cls, *, activity_id: ActivityId, timestamp: datetime.timestamp, account_id: UUID, amount_in_cents: int, category_id: int, merchant_id: UUID, status_id: int) -> 'Activity':
+    def from_value(cls, *, activity_id: ActivityId, timestamp: datetime.timestamp, account_id: UUID, amount_in_cents: int, category_id: int, merchant_id: Optional[UUID], status_id: int) -> 'Activity':
         cls.__allow_instantiation = True
-        return cls(activity_id, timestamp, account_id, amount_in_cents, category_id, merchant_id, status_id)
+        return cls(activity_id=activity_id, timestamp=timestamp, account_id=account_id, amount_in_cents=amount_in_cents, category_id=category_id, merchant_id=merchant_id, status_id=status_id)

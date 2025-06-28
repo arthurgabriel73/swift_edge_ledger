@@ -19,17 +19,16 @@ class TestActivity:
         account_id = uuid.uuid4()
         amount_in_cents = 1000
         category_id = 1
-        merchant_id = uuid.uuid4()
 
         # Act
-        activity = Activity.create(activity_id, account_id, amount_in_cents, category_id, merchant_id)
+        activity = Activity.create(activity_id=activity_id, account_id=account_id, amount_in_cents=amount_in_cents, category_id=category_id, merchant_id=None)
 
         # Assert
         assert activity.id == activity_id
         assert activity.account_id == account_id
         assert activity.amount_in_cents == amount_in_cents
         assert activity.category_id == category_id
-        assert activity.merchant_id == merchant_id
+        assert activity.merchant_id is None
         assert activity.status_id is None
         assert activity.timestamp is not None
 
