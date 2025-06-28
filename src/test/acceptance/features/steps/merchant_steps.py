@@ -50,7 +50,7 @@ def step_impl(context):
 
 @given('I have a merchant registration request with an existing merchant name')
 def step_impl(context):
-    existing_merchant = MerchantEntity(id=uuid.uuid4(), merchant_name="Existing Merchant", mcc_id=uuid.uuid4(), created_at=datetime.now())
+    existing_merchant = MerchantEntity(id=uuid.uuid4(), merchant_name="Existing Merchant", mcc_id=context.existing_mcc.id, created_at=datetime.now())
     context.db.add(existing_merchant)
     context.db.commit()
 

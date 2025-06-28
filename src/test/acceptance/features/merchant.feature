@@ -17,12 +17,12 @@ Feature: Merchant
     Then I should receive a response with status code 400
     And the response should contain an error message indicating the merchant validation failure
 
-  # fail
-#  Scenario: Create a merchant registration with already existing merchant name
-#    Given I have a merchant registration request with an existing merchant name
-#    When I send the request to create a new merchant registration
-#    Then I should receive a response with status code 409
-#    And the response should contain an error message indicating that the merchant already exists
+  Scenario: Create a merchant registration with already existing merchant name
+    Given the system has an existing mcc registration
+    And I have a merchant registration request with an existing merchant name
+    When I send the request to create a new merchant registration
+    Then I should receive a response with status code 409
+    And the response should contain an error message indicating that the merchant already exists
 
   Scenario: Create a mcc
     Given I have a valid mcc registration request
