@@ -1,0 +1,21 @@
+Feature: Account
+
+  Scenario: Create a new account
+    Given I have a valid account creation request ... passed in 0.000s
+    When I send the request to create a new account ... passed in 0.028s
+    Then I should receive a response with status code 201 ... passed in 0.000s
+    And the response should contain the account details ... passed in 0.000s
+    And the account should be created in the system ... passed in 0.003s
+
+  Scenario: Create an account with invalid data
+    Given I have an invalid account creation request ... passed in 0.000s
+    When I send the request to create a new account ... passed in 0.003s
+    Then I should receive a response with status code 400 ... passed in 0.000s
+    And the response should contain an error message indicating the validation failure ... passed in 0.000s
+
+  Scenario: Create an account with already existing account number
+    Given I have an account creation request with an existing account number ... passed in 0.005s
+    When I send the request to create a new account ... passed in 0.006s
+    Then I should receive a response with status code 409 ... passed in 0.000s
+    And the response should contain an error message indicating that the account already exists ... passed in 0.000s
+
