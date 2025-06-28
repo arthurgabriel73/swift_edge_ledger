@@ -38,6 +38,16 @@ def step_impl(context):
         "Content-Type": "application/json"
     }
 
+@given('I have a category registration request with an existing category code')
+def step_impl(context):
+    context.request_data = {
+        "code": context.existing_category.code,
+        "description": context.existing_category.description
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
 
 @given('I have a valid merchant registration request with the existing mcc code')
 def step_impl(context):
@@ -74,6 +84,16 @@ def step_impl(context):
     context.request_data = {
         "merchant_name": "",  # Invalid name
         "mcc_id": str(uuid.uuid4())
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+@given('I have an invalid category registration request')
+def step_impl(context):
+    context.request_data = {
+        "code": "FO",  # Invalid code
+        "description": "This is a food category"
     }
     context.headers = {
         "Content-Type": "application/json"
@@ -200,3 +220,17 @@ def step_impl(context):
     assert 'detail' in response_data, "Response does not contain 'detail'"
     assert response_data['detail'] == "MCC code must be 4 characters long", \
         f"Expected error message 'MCC code must be 4 characters long', but got {response_data['detail']}"
+
+@then('the response should contain an error message indicating the category validation failure')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == "Category code must be between 3 and 100 characters long", \
+        f"Expected error message 'Category code must be between 3 and 100 characters long', but got {response_data['detail']}"
+
+@then('the response should contain an error message indicating that the category already exists')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == f"Category with code {context.request_data['code']} already exists.", \
+        f"Expected error message 'Category with code {context.request_data['code']} already exists.', but got {response_data['detail']}"

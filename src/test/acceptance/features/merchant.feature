@@ -54,3 +54,16 @@ Feature: Merchant
     Then I should receive a response with status code 201
     And the response should contain the category details
     And the category should be created in the system
+
+  Scenario: Create a category with invalid data
+    Given I have an invalid category registration request
+    When I send the request to create a new category
+    Then I should receive a response with status code 400
+    And the response should contain an error message indicating the category validation failure
+
+  Scenario: Create a category with already existing category code
+    Given the system has an existing category registration
+    And I have a category registration request with an existing category code
+    When I send the request to create a new category
+    Then I should receive a response with status code 409
+    And the response should contain an error message indicating that the category already exists
