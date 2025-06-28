@@ -6,12 +6,22 @@ from behave import given, when, then
 from src.main.shared.database.sqlalchemy.models import MerchantEntity, MccEntity, CategoryEntity
 
 
-@given('the system has an existing mcc registration')
+@given('the system has an existing category registration')
+def step_impl(context):
+    context.existing_category = CategoryEntity(
+        code="FOOD",
+        description="This is a food category",
+        created_at=datetime.now()
+    )
+    context.db.add(context.existing_category)
+    context.db.commit()
+
+@given('the system has an existing mcc registration for the category')
 def step_impl(context):
     context.existing_mcc = MccEntity(
         id=uuid.uuid4(),
         code="5677",
-        category_id=1234,
+        category_id=context.existing_category.id,
         created_at=datetime.now()
     )
     context.db.add(context.existing_mcc)
