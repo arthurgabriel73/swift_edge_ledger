@@ -39,11 +39,12 @@ jobs:
         poetry install --no-interaction --with dev
         poetry show
 
-    - name: Setup acceptance test database
+    - name: Setup acceptance test db
       env:
         ENV: test
         PYTHONPATH: ${{ github.workspace }}
       run: |
+        echo "Using environment: $ENV"
         make test-db
 
     - name: Run Pytest with coverage
@@ -51,6 +52,7 @@ jobs:
         ENV: test
         PYTHONPATH: ${{ github.workspace }}
       run: |
+        echo "Using environment: $ENV"
         poetry run coverage run --source=./ -m pytest -v
         coverage report --fail-under=80
 
@@ -59,6 +61,7 @@ jobs:
         ENV: test
         PYTHONPATH: ${{ github.workspace }}
       run: |
+        echo "Using environment: $ENV"
         poetry run coverage run --source=./ -m behave
         coverage report --fail-under=80
 
