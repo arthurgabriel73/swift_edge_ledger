@@ -39,14 +39,14 @@ jobs:
         poetry install --no-interaction --with dev
         poetry show
 
+    - name: Setup acceptance test database
+      run: |
+        make test-db
+
     - name: Run Pytest with coverage
       run: |
         poetry run coverage run --source=./ -m pytest -v
         coverage report --fail-under=80
-
-    - name: Setup acceptance test database
-      run: |
-        make test-db
 
     - name: Run Behave with coverage
       run: |
