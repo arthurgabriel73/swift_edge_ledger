@@ -2,11 +2,11 @@ import uuid
 
 import pytest
 
-from main.merchant.domain.mcc_id import MccId
-from main.merchant.domain.merchant import Merchant
-from main.merchant.domain.merchant_id import MerchantId
-from main.merchant.domain.merchant_name import MerchantName
-from main.shared.date_util import get_utc_now
+from src.main.merchant.domain.mcc_id import MccId
+from src.main.merchant.domain.merchant import Merchant
+from src.main.merchant.domain.merchant_id import MerchantId
+from src.main.merchant.domain.merchant_name import MerchantName
+from src.main.shared.date_util import get_utc_now
 
 
 class TestMerchant:

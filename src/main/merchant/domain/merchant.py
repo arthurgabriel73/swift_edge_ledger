@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from main.shared.date_util import get_utc_now
+from src.main.shared.date_util import get_utc_now
 from src.main.merchant.domain.mcc_id import MccId
 from src.main.merchant.domain.merchant_name import MerchantName
 from src.main.merchant.domain.merchant_id import MerchantId

@@ -1,9 +1,9 @@
 from sqlalchemy.ext.declarative import declarative_base
 
-from main.merchant.domain.mcc_id import MccId
-from main.merchant.domain.merchant import Merchant
-from main.merchant.domain.merchant_id import MerchantId
-from main.merchant.domain.merchant_name import MerchantName
+from src.main.merchant.domain.mcc_id import MccId
+from src.main.merchant.domain.merchant import Merchant
+from src.main.merchant.domain.merchant_id import MerchantId
+from src.main.merchant.domain.merchant_name import MerchantName
 
 Base = declarative_base()
 metadata = Base.metadata
