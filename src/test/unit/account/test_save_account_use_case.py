@@ -17,7 +17,7 @@ class TestSaveAccountUseCase:
 
     def test_save_account_success(self, setup):
         # Arrange
-        command = SaveAccountCommand(account_number="123456789")
+        command = SaveAccountCommand(account_number="123456787458789")
 
         # Act
         output = self.sut.execute(command)
@@ -28,7 +28,7 @@ class TestSaveAccountUseCase:
 
     def test_save_account_with_existing_account_number_raises_error(self, setup):
         # Arrange
-        account_number = "123456789"
+        account_number = "212341234123432"
         command = SaveAccountCommand(account_number)
         self.sut.execute(command)
 
