@@ -53,4 +53,4 @@ Feature: Merchant
     When I send the request to create a new category
     Then I should receive a response with status code 201
     And the response should contain the category details
-      And the category should be created in the system
+    And the category should be created in the system
