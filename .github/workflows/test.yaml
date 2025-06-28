@@ -40,6 +40,9 @@ jobs:
         poetry show
 
     - name: Setup acceptance test database
+      env:
+        ENV: test
+        PYTHONPATH: ${{ github.workspace }}
       run: |
         make test-db
 
