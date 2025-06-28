@@ -84,7 +84,7 @@ class MccEntity(Base):
     __tablename__ = 'mcc'
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
-    code: Mapped[str] = mapped_column(nullable=False)
+    code: Mapped[str] = mapped_column(nullable=False, unique=True)
     category_id: Mapped[int] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(nullable=False)
 
