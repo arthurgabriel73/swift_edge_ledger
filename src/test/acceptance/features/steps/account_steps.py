@@ -44,13 +44,6 @@ def step_impl(context):
 def step_impl(context):
     context.response = context.client.post('/accounts', json=context.request_data, headers=context.headers)
 
-@then('I should receive a response with status code 201')
-def step_impl(context):
-    assert context.response.status_code == 201, f"Expected status code 201, but got {context.response.status_code}"
-
-@then('I should receive a response with status code 400')
-def step_impl(context):
-    assert context.response.status_code == 400, f"Expected status code 400, but got {context.response.status_code}"
 
 @then('the response should contain the account details')
 def step_impl(context):
@@ -70,20 +63,16 @@ def step_impl(context):
     assert account.account_number == context.request_data['account_number'], \
         f"Expected account number {context.request_data['account_number']}, but got {account.account_number}"
 
-@then('the response should contain an error message indicating the validation failure')
+@then('the response should contain an error message indicating the account validation failure')
 def step_impl(context):
     response_data = context.response.json()
     assert 'detail' in response_data, "Response does not contain 'detail'"
     assert response_data['detail'] == "Account number must be between 4 and 20 characters long", \
         f"Expected error message 'Account number must be between 4 and 20 characters long', but got {response_data['detail']}"
 
-@then('I should receive a response with status code 409')
-def step_impl(context):
-    assert context.response.status_code == 409, f"Expected status code 409, but got {context.response.status_code}"
-
 @then('the response should contain an error message indicating that the account already exists')
 def step_impl(context):
     response_data = context.response.json()
     assert 'detail' in response_data, "Response does not contain 'detail'"
     assert response_data['detail'] == f"Account with number {context.request_data["account_number"]} already exists.", \
-        f"Expected error message 'Account already exists', but got {response_data['detail']}"
+        f"Expected error message 'Account with number {context.request_data["account_number"]} already exists.', but got {response_data['detail']}"

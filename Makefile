@@ -5,7 +5,16 @@ include .env.test
 export ENV=test
 export PYTHONPATH=$(pwd)
 
-test-bdd: test-db
+test: unit bdd
+
+unit:
+	@echo "\033[0;36mRunning unit tests...\033[0m"
+	export ENV=test
+	export PYTHONPATH=$(pwd)
+	poetry run coverage run --source=./ -m pytest -v
+	@echo "\033[0;32mUnit tests completed successfully!\033[0m"
+
+bdd: test-db
 	@echo "\033[0;36mRunning BDD tests...\033[0m"
 	export ENV=test
 	export PYTHONPATH=$(pwd)
