@@ -22,5 +22,5 @@ class InMemoryMerchantRepository(MerchantRepository):
         found = next((merchant for merchant in self.merchants if merchant.name.value() == merchant_name.value()), None)
         return self.to_new_instance(found) if found else None
 
-    def to_new_instance(self, merchant: Merchant):
+    def to_new_instance(self, merchant: Merchant) -> Merchant:
         return Merchant.from_value(merchant_id=merchant.id, merchant_name=merchant.name, mcc_id=merchant.mcc_id, created_at=merchant.created_at)
