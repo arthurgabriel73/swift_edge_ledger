@@ -7,14 +7,14 @@ from src.main.account.infra.adapters.driven.persistence.in_memory_account_reposi
 
 
 class TestSaveAccountUseCase:
-    accountRepository: InMemoryAccountRepository
+    account_repository: InMemoryAccountRepository
     sut: SaveAccountUseCase
 
 
     @pytest.fixture
     def setup(self):
-        self.accountRepository = InMemoryAccountRepository()
-        self.sut = SaveAccountUseCase(self.accountRepository)
+        self.account_repository = InMemoryAccountRepository()
+        self.sut = SaveAccountUseCase(self.account_repository)
 
     def test_save_account_success(self, setup):
         # Arrange
