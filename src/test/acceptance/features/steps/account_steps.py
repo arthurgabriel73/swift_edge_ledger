@@ -1,0 +1,42 @@
+from behave import given, when, then
+
+from src.main.shared.database.sqlalchemy.models import AccountEntity
+from faker import Faker
+
+
+fake = Faker()
+
+@given('I have a valid account creation request')
+def step_impl(context):
+    context.request_data = {
+        "account_number": fake.credit_card_number(),
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+@when('I send the request to create a new account')
+def step_impl(context):
+    context.response = context.client.post('/accounts', json=context.request_data, headers=context.headers)
+
+@then('I should receive a response with status code 201')
+def step_impl(context):
+    assert context.response.status_code == 201, f"Expected status code 201, but got {context.response.status_code}"
+
+@then('the response should contain the account details')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'account_number' in response_data, "Response does not contain 'account_number'"
+    assert response_data['account_number'] == context.request_data['account_number'], \
+        f"Expected account number {context.request_data['account_number']}, but got {response_data['account_number']}"
+    assert 'account_id' in response_data, "Response does not contain 'account_id'"
+
+@then('the account should be created in the system')
+def step_impl(context):
+    response_data = context.response.json()
+    account_id = response_data['account_id']
+
+    account = context.db.query(AccountEntity).filter(AccountEntity.id == account_id).first()
+    assert account is not None, "Account was not created in the system"
+    assert account.account_number == context.request_data['account_number'], \
+        f"Expected account number {context.request_data['account_number']}, but got {account.account_number}"

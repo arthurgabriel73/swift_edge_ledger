@@ -1,0 +1,9 @@
+Feature: Account
+
+  Scenario: Create a new account
+    Given I have a valid account creation request ... passed in 0.000s
+    When I send the request to create a new account ... passed in 0.023s
+    Then I should receive a response with status code 201 ... passed in 0.000s
+    And the response should contain the account details ... passed in 0.000s
+    And the account should be created in the system ... passed in 0.002s
+

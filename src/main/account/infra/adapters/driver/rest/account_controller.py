@@ -13,7 +13,7 @@ accounts_router = APIRouter(
     tags=["Accounts"]
 )
 
-@accounts_router.post(ACCOUNTS_URL, status_code=201)
+@accounts_router.post("/", status_code=201)
 @transactional
 def save_account(request: SaveAccountRequest):
     driver: SaveAccountDriverPort = save_account_driver_factory()
