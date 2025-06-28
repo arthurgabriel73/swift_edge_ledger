@@ -1,6 +1,5 @@
 from typing import Optional
 
-from sqlalchemy import Table
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
@@ -17,8 +16,7 @@ class SqlAlchemyCategoryRepository(CategoryRepository):
             raise ValueError("Session must be provided for saving the category.")
 
         category_entity = CategoryEntity.from_domain(category)
-        table = Table('categories', CategoryEntity.metadata)
-        session.execute(table.insert(), [category_entity.to_dict()])
+        session.add(category_entity)
         return category_entity.to_domain()
 
     def find_by_id(self, category_id: int, session: Optional[Session] = None) -> Optional[Category]:

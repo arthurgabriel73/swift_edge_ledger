@@ -3,7 +3,7 @@ from datetime import datetime
 
 from behave import given, when, then
 
-from src.main.shared.database.sqlalchemy.models import MerchantEntity, MccEntity
+from src.main.shared.database.sqlalchemy.models import MerchantEntity, MccEntity, CategoryEntity
 
 
 @given('the system has an existing mcc registration')
@@ -44,6 +44,16 @@ def step_impl(context):
     context.request_data = {
         "code": "7856",
         "category_id": 5456
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+@given('I have a valid category registration request')
+def step_impl(context):
+    context.request_data = {
+        "code": "FOOD",
+        "description": "This is a food category"
     }
     context.headers = {
         "Content-Type": "application/json"
@@ -91,6 +101,10 @@ def step_impl(context):
 def step_impl(context):
     context.response = context.client.post('/mcc', json=context.request_data, headers=context.headers)
 
+@when('I send the request to create a new category')
+def step_impl(context):
+    context.response = context.client.post('/categories', json=context.request_data, headers=context.headers)
+
 @then('the response should contain the merchant details')
 def step_impl(context):
     response_data = context.response.json()
@@ -108,6 +122,16 @@ def step_impl(context):
     assert 'category_id' in response_data, "Response does not contain 'category_id'"
     assert response_data['category_id'] == context.request_data['category_id'], \
         f"Expected category ID {context.request_data['category_id']}, but got {response_data['category_id']}"
+
+@then('the response should contain the category details')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'code' in response_data, "Response does not contain 'code'"
+    assert response_data['code'] == context.request_data['code'], \
+        f"Expected category code {context.request_data['code']}, but got {response_data['code']}"
+    assert 'description' in response_data, "Response does not contain 'description'"
+    assert response_data['description'] == context.request_data['description'], \
+        f"Expected category description {context.request_data['description']}, but got {response_data['description']}"
 
 @then('the merchant should be created in the system')
 def step_impl(context):
@@ -128,6 +152,16 @@ def step_impl(context):
     assert mcc is not None, "MCC was not created in the system"
     assert mcc.code == mcc_code, f"Expected MCC code {mcc_code}, but got {mcc.code}"
     assert mcc.category_id == category_id, f"Expected category ID {category_id}, but got {mcc.category_id}"
+
+@then('the category should be created in the system')
+def step_impl(context):
+    response_data = context.response.json()
+    category_code = response_data['code']
+    description = response_data['description']
+    category = context.db.query(CategoryEntity).filter_by(code=category_code, description=description).first()
+    assert category is not None, "Category was not created in the system"
+    assert category.code == category_code, f"Expected category code {category_code}, but got {category.code}"
+    assert category.description == description, f"Expected category description {description}, but got {category.description}"
 
 @then('the response should contain an error message indicating the merchant validation failure')
 def step_impl(context):
