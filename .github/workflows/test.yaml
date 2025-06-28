@@ -41,15 +41,20 @@ jobs:
 
     - name: Setup acceptance test database
       run: |
-        export ENV=test
         make test-db
 
     - name: Run Pytest with coverage
+      env:
+        ENV: test
+        PYTHONPATH: ${{ github.workspace }}
       run: |
         poetry run coverage run --source=./ -m pytest -v
         coverage report --fail-under=80
 
     - name: Run Behave with coverage
+      env:
+        ENV: test
+        PYTHONPATH: ${{ github.workspace }}
       run: |
         poetry run coverage run --source=./ -m behave
         coverage report --fail-under=80
