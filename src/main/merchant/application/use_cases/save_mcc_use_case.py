@@ -1,12 +1,12 @@
 import uuid
 
-from main.merchant.application.ports.driven.mcc_repository import MccRepository
-from main.merchant.application.ports.driver.commands.save_mcc_command import SaveMccCommand
-from main.merchant.application.ports.driver.commands.save_mcc_command_output import SaveMccCommandOutput
-from main.merchant.application.ports.driver.save_mcc_driver_port import SaveMccDriverPort
-from main.merchant.application.use_cases.exceptions.mcc_conflict_exception import MccConflictException
-from main.merchant.domain.mcc import Mcc
-from main.merchant.domain.mcc_id import MccId
+from src.main.merchant.application.ports.driven.mcc_repository import MccRepository
+from src.main.merchant.application.ports.driver.commands.save_mcc_command import SaveMccCommand
+from src.main.merchant.application.ports.driver.commands.save_mcc_command_output import SaveMccCommandOutput
+from src.main.merchant.application.ports.driver.save_mcc_driver_port import SaveMccDriverPort
+from src.main.merchant.application.use_cases.exceptions.mcc_conflict_exception import MccConflictException
+from src.main.merchant.domain.mcc import Mcc
+from src.main.merchant.domain.mcc_id import MccId
 
 
 class SaveMccUseCase(SaveMccDriverPort):
@@ -17,7 +17,7 @@ class SaveMccUseCase(SaveMccDriverPort):
         self.require_mcc_code_does_not_exist(command.code)
         created_mcc = self.mcc_repository.save(Mcc.create(MccId(uuid.uuid4()), command.code, command.category_id))
         return SaveMccCommandOutput(created_mcc.id, created_mcc.code, created_mcc.category_id)
-    
+
     def require_mcc_code_does_not_exist(self, code: str):
         existing_mcc = self.mcc_repository.find_by_code(code)
         if existing_mcc:

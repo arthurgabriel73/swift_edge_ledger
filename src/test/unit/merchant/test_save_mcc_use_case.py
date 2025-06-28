@@ -1,9 +1,9 @@
 import pytest
 
-from main.merchant.application.ports.driven.mcc_repository import MccRepository
-from main.merchant.application.ports.driver.commands.save_mcc_command import SaveMccCommand
-from main.merchant.application.use_cases.save_mcc_use_case import SaveMccUseCase
-from main.merchant.infra.adapters.driven.persistence.in_memory_mcc_repository import InMemoryMccRepository
+from src.main.merchant.application.ports.driven.mcc_repository import MccRepository
+from src.main.merchant.application.ports.driver.commands.save_mcc_command import SaveMccCommand
+from src.main.merchant.application.use_cases.save_mcc_use_case import SaveMccUseCase
+from src.main.merchant.infra.adapters.driven.persistence.in_memory_mcc_repository import InMemoryMccRepository
 
 
 class TestSaveMccUseCase:

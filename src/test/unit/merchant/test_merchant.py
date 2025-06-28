@@ -13,7 +13,7 @@ class TestMerchant:
     def test_use_constructor_outside_class(self):
         # Act & Assert
         with pytest.raises(RuntimeError, match='Use the create method to instantiate a Merchant'):
-            Merchant(merchant_id=MerchantId(uuid.uuid4()), merchant_name=MerchantName("Test Merchant"), mcc_id=1232, created_at=get_utc_now())
+            Merchant(merchant_id=MerchantId(uuid.uuid4()), merchant_name=MerchantName("Test Merchant"), mcc_id=MccId(uuid.uuid4()), created_at=get_utc_now())
 
 
     def test_use_create_method(self):

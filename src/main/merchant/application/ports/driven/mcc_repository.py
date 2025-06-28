@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from main.merchant.domain.mcc import Mcc
-from main.merchant.domain.mcc_id import MccId
+from src.main.merchant.domain.mcc import Mcc
+from src.main.merchant.domain.mcc_id import MccId
 
 
 class MccRepository(ABC):

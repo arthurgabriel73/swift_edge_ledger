@@ -1,8 +1,8 @@
 from typing import List, Optional
 
-from main.merchant.application.ports.driven.mcc_repository import MccRepository
-from main.merchant.domain.mcc import Mcc
-from main.merchant.domain.mcc_id import MccId
+from src.main.merchant.application.ports.driven.mcc_repository import MccRepository
+from src.main.merchant.domain.mcc import Mcc
+from src.main.merchant.domain.mcc_id import MccId
 
 
 class InMemoryMccRepository(MccRepository):
@@ -22,4 +22,4 @@ class InMemoryMccRepository(MccRepository):
         return self.to_new_instance(found) if found else None
 
     def to_new_instance(self, mcc: Mcc) -> Mcc:
-        return Mcc.from_value(mcc_id=mcc.id, code=mcc.code, category_id=mcc.category_id)
+        return Mcc.from_value(mcc_id=mcc.id, code=mcc.code, category_id=mcc.category_id, created_at=mcc.created_at)

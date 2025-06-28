@@ -92,7 +92,8 @@ class MccEntity(Base):
         return Mcc.from_value(
             mcc_id=MccId(self.id),
             code=self.code,
-            category_id=self.category_id
+            category_id=self.category_id,
+            created_at=self.created_at
         )
 
     @classmethod
