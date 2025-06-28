@@ -57,7 +57,6 @@ def step_impl(context):
 @then('the response should contain an error message indicating the validation failure')
 def step_impl(context):
     response_data = context.response.json()
-    assert 'error' in response_data, "Response does not contain 'error'"
-    assert 'message' in response_data['error'], "Error message is missing"
-    assert response_data['error']['message'] == "Invalid account number", \
-        f"Expected error message 'Invalid account number', but got {response_data['error']['message']}"
+    assert 'detail' in response_data, "Response does not contain 'error'"
+    assert response_data['detail'] == "Invalid account number", \
+        f"Expected error message 'Invalid account number', but got {response_data['detail']}"
