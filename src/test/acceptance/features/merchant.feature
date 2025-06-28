@@ -30,3 +30,16 @@ Feature: Merchant
     Then I should receive a response with status code 201
     And the response should contain the mcc details
     And the mcc should be created in the system
+
+  Scenario: Create a mcc with invalid data
+    Given I have an invalid mcc registration request
+    When I send the request to create a new mcc registration
+    Then I should receive a response with status code 400
+    And the response should contain an error message indicating the mcc validation failure
+
+  Scenario: Create a mcc with already existing mcc code
+    Given the system has an existing mcc registration
+    And I have a mcc registration request with an existing mcc code
+    When I send the request to create a new mcc registration
+    Then I should receive a response with status code 409
+    And the response should contain an error message indicating that the mcc already exists

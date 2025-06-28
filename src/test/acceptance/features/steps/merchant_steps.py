@@ -18,6 +18,17 @@ def step_impl(context):
     context.db.commit()
 
 
+@given('I have a mcc registration request with an existing mcc code')
+def step_impl(context):
+    context.request_data = {
+        "code": context.existing_mcc.code,
+        "category_id": context.existing_mcc.category_id
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+
 @given('I have a valid merchant registration request with the existing mcc code')
 def step_impl(context):
     context.request_data = {
@@ -43,6 +54,16 @@ def step_impl(context):
     context.request_data = {
         "merchant_name": "",  # Invalid name
         "mcc_id": str(uuid.uuid4())
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+@given('I have an invalid mcc registration request')
+def step_impl(context):
+    context.request_data = {
+        "code": "11",  # Invalid code
+        "category_id": 1234
     }
     context.headers = {
         "Content-Type": "application/json"
@@ -121,3 +142,17 @@ def step_impl(context):
     assert 'detail' in response_data, "Response does not contain 'detail'"
     assert response_data['detail'] == f"Merchant with name {context.request_data["merchant_name"]} already exists.", \
         f"Expected error message 'Merchant with name {context.request_data["merchant_name"]} already exists.', but got {response_data['detail']}"
+
+@then('the response should contain an error message indicating that the mcc already exists')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == f"MCC with code {context.request_data['code']} already exists.", \
+        f"Expected error message 'MCC with code {context.request_data['code']} already exists.', but got {response_data['detail']}"
+
+@then('the response should contain an error message indicating the mcc validation failure')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == "MCC code must be 4 characters long", \
+        f"Expected error message 'MCC code must be 4 characters long', but got {response_data['detail']}"
