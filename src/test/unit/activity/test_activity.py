@@ -20,10 +20,9 @@ class TestActivity:
         amount_in_cents = 1000
         category_id = 1
         merchant_id = uuid.uuid4()
-        status_id = 1
 
         # Act
-        activity = Activity.create(activity_id, account_id, amount_in_cents, category_id, merchant_id, status_id)
+        activity = Activity.create(activity_id, account_id, amount_in_cents, category_id, merchant_id)
 
         # Assert
         assert activity.id == activity_id
@@ -31,7 +30,7 @@ class TestActivity:
         assert activity.amount_in_cents == amount_in_cents
         assert activity.category_id == category_id
         assert activity.merchant_id == merchant_id
-        assert activity.status_id == status_id
+        assert activity.status_id is None
         assert activity.timestamp is not None
 
     def test_use_from_value_method(self):
