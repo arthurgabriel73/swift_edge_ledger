@@ -4,10 +4,10 @@ from sqlalchemy import Table
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from main.merchant.application.ports.driven.category_repository import CategoryRepository
-from main.merchant.domain.category import Category
-from main.shared.database.sqlalchemy.models import CategoryEntity
-from main.shared.persistence_decorators import repository
+from src.main.merchant.application.ports.driven.category_repository import CategoryRepository
+from src.main.merchant.domain.category import Category
+from src.main.shared.database.sqlalchemy.models import CategoryEntity
+from src.main.shared.persistence_decorators import repository
 
 
 @repository
