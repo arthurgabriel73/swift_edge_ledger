@@ -1,8 +1,8 @@
 import uuid
 
 from src.main.merchant.application.ports.driven.merchant_repository import MerchantRepository
-from src.main.merchant.application.ports.driver.save_merchant_command import SaveMerchantCommand
-from src.main.merchant.application.ports.driver.save_merchant_command_output import SaveMerchantCommandOutput
+from src.main.merchant.application.ports.driver.commands.save_merchant_command import SaveMerchantCommand
+from src.main.merchant.application.ports.driver.commands.save_merchant_command_output import SaveMerchantCommandOutput
 from src.main.merchant.application.ports.driver.save_merchant_driver_port import SaveMerchantDriverPort
 from src.main.merchant.application.use_cases.exceptions.merchant_conflict_exception import MerchantConflictException
 from src.main.merchant.domain.mcc_id import MccId

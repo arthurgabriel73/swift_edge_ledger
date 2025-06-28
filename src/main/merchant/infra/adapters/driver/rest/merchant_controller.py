@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from src.main.merchant.application.ports.driver.save_merchant_command import SaveMerchantCommand
+from src.main.merchant.application.ports.driver.commands.save_merchant_command import SaveMerchantCommand
 from src.main.merchant.application.ports.driver.save_merchant_driver_port import SaveMerchantDriverPort
 from src.main.merchant.infra.adapters.driver.rest.request.save_merchant_request import SaveMerchantRequest
 from src.main.merchant.infra.config.ioc import save_merchant_driver_factory
