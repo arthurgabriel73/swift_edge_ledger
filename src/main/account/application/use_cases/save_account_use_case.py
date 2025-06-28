@@ -1,5 +1,6 @@
 import uuid
 
+from src.main.account.application.use_cases.exceptions.account_conflict_exception import AccountConflictException
 from src.main.account.application.ports.driven.account_repository import AccountRepository
 from src.main.account.application.ports.driver.save_account_command import SaveAccountCommand
 from src.main.account.application.ports.driver.save_account_command_output import SaveAccountCommandOutput
@@ -22,4 +23,4 @@ class SaveAccountUseCase(SaveAccountDriverPort):
     def _require_account_number_does_not_exist(self, account_number: str):
         existing_account = self.account_repository.find_by_account_number(AccountNumber(account_number))
         if existing_account:
-            raise ValueError(f"Account with number {account_number} already exists.") # TODO: Use a custom exception
+            raise AccountConflictException(f"Account with number {account_number} already exists.")

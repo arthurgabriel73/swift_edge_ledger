@@ -73,7 +73,7 @@ def step_impl(context):
 @then('the response should contain an error message indicating the validation failure')
 def step_impl(context):
     response_data = context.response.json()
-    assert 'detail' in response_data, "Response does not contain 'error'"
+    assert 'detail' in response_data, "Response does not contain 'detail'"
     assert response_data['detail'] == "Invalid account number", \
         f"Expected error message 'Invalid account number', but got {response_data['detail']}"
 
@@ -84,6 +84,6 @@ def step_impl(context):
 @then('the response should contain an error message indicating that the account already exists')
 def step_impl(context):
     response_data = context.response.json()
-    assert 'detail' in response_data, "Response does not contain 'error'"
-    assert response_data['detail'] == "Account already exists", \
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == f"Account with number {context.request_data["account_number"]} already exists.", \
         f"Expected error message 'Account already exists', but got {response_data['detail']}"
