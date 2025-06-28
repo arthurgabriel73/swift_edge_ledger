@@ -18,7 +18,7 @@ class SaveMerchantUseCase(SaveMerchantDriverPort):
     def execute(self, command: SaveMerchantCommand) -> SaveMerchantCommandOutput:
         self.require_merchant_name_does_not_exist(command.merchant_name)
         created_merchant: Merchant = self.merchant_repository.save(
-            Merchant.create(MerchantId(uuid.uuid4()), MerchantName(command.merchant_name), MccId(uuid.uuid4()))
+            Merchant.create(MerchantId(uuid.uuid4()), MerchantName(command.merchant_name), MccId(command.mcc_id))
         )
         return SaveMerchantCommandOutput(created_merchant.id, created_merchant.name)
 

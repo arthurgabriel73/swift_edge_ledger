@@ -16,7 +16,7 @@ mcc_router = APIRouter(
 
 @mcc_router.post("/", status_code=201)
 @transactional
-def save_mcc(request: SaveMccRequest) -> SaveMccCommandOutput:
+def save_mcc(request: SaveMccRequest):
     driver: SaveMccDriverPort = save_mcc_driver_factory()
     command = SaveMccCommand(
         code=request.code,
