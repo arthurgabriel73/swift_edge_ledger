@@ -49,11 +49,11 @@ def step_impl(context):
         "Content-Type": "application/json"
     }
 
-@given('I have a valid mcc registration request')
+@given('I have a valid mcc registration request with the existing category code')
 def step_impl(context):
     context.request_data = {
         "code": "7856",
-        "category_id": 5456
+        "category_id": context.existing_category.id
     }
     context.headers = {
         "Content-Type": "application/json"

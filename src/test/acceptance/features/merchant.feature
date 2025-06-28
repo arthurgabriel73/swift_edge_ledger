@@ -26,13 +26,13 @@ Feature: Merchant
     Then I should receive a response with status code 409
     And the response should contain an error message indicating that the merchant already exists
 
-# Fail
-#  Scenario: Create a mcc
-#    Given I have a valid mcc registration request
-#    When I send the request to create a new mcc registration
-#    Then I should receive a response with status code 201
-#    And the response should contain the mcc details
-#    And the mcc should be created in the system
+  Scenario: Create a mcc
+    Given the system has an existing category registration
+    And I have a valid mcc registration request with the existing category code
+    When I send the request to create a new mcc registration
+    Then I should receive a response with status code 201
+    And the response should contain the mcc details
+    And the mcc should be created in the system
 
 # Fail
 #  Scenario: Create a mcc with invalid data
