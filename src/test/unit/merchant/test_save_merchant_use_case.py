@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from src.main.merchant.application.ports.driver.save_merchant_command import SaveMerchantCommand
+from src.main.merchant.application.ports.driver.commands.save_merchant_command import SaveMerchantCommand
 from src.main.merchant.application.ports.driven.merchant_repository import MerchantRepository
 from src.main.merchant.application.use_cases.save_merchant_use_case import SaveMerchantUseCase
 from src.main.merchant.infra.adapters.driven.persistence.in_memory_merchant_repository import InMemoryMerchantRepository

@@ -3,14 +3,47 @@ from datetime import datetime
 
 from behave import given, when, then
 
-from src.main.shared.database.sqlalchemy.models import MerchantEntity
+from src.main.shared.database.sqlalchemy.models import MerchantEntity, MccEntity
 
 
-@given('I have a valid merchant registration request')
+@given('the system has an existing mcc registration')
+def step_impl(context):
+    context.existing_mcc = MccEntity(
+        id=uuid.uuid4(),
+        code="5677",
+        category_id=1234,
+        created_at=datetime.now()
+    )
+    context.db.add(context.existing_mcc)
+    context.db.commit()
+
+
+@given('I have a mcc registration request with an existing mcc code')
+def step_impl(context):
+    context.request_data = {
+        "code": context.existing_mcc.code,
+        "category_id": context.existing_mcc.category_id
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+
+@given('I have a valid merchant registration request with the existing mcc code')
 def step_impl(context):
     context.request_data = {
         "merchant_name": "Test Merchant",
-        "mcc_id": str(uuid.uuid4())
+        "mcc_id": str(context.existing_mcc.id)
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
+@given('I have a valid mcc registration request')
+def step_impl(context):
+    context.request_data = {
+        "code": "7856",
+        "category_id": 5456
     }
     context.headers = {
         "Content-Type": "application/json"
@@ -26,9 +59,19 @@ def step_impl(context):
         "Content-Type": "application/json"
     }
 
+@given('I have an invalid mcc registration request')
+def step_impl(context):
+    context.request_data = {
+        "code": "11",  # Invalid code
+        "category_id": 1234
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
 @given('I have a merchant registration request with an existing merchant name')
 def step_impl(context):
-    existing_merchant = MerchantEntity(id=uuid.uuid4(), merchant_name="Existing Merchant", mcc_id=uuid.uuid4(), created_at=datetime.now())
+    existing_merchant = MerchantEntity(id=uuid.uuid4(), merchant_name="Existing Merchant", mcc_id=context.existing_mcc.id, created_at=datetime.now())
     context.db.add(existing_merchant)
     context.db.commit()
 
@@ -44,6 +87,10 @@ def step_impl(context):
 def step_impl(context):
     context.response = context.client.post('/merchants', json=context.request_data, headers=context.headers)
 
+@when('I send the request to create a new mcc registration')
+def step_impl(context):
+    context.response = context.client.post('/mcc', json=context.request_data, headers=context.headers)
+
 @then('the response should contain the merchant details')
 def step_impl(context):
     response_data = context.response.json()
@@ -51,6 +98,16 @@ def step_impl(context):
     assert response_data['merchant_name'] == context.request_data['merchant_name'], \
         f"Expected merchant name {context.request_data['merchant_name']}, but got {response_data['merchant_name']}"
     assert 'merchant_id' in response_data, "Response does not contain 'merchant_id'"
+
+@then('the response should contain the mcc details')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'code' in response_data, "Response does not contain 'code'"
+    assert response_data['code'] == context.request_data['code'], \
+        f"Expected MCC code {context.request_data['code']}, but got {response_data['code']}"
+    assert 'category_id' in response_data, "Response does not contain 'category_id'"
+    assert response_data['category_id'] == context.request_data['category_id'], \
+        f"Expected category ID {context.request_data['category_id']}, but got {response_data['category_id']}"
 
 @then('the merchant should be created in the system')
 def step_impl(context):
@@ -61,6 +118,16 @@ def step_impl(context):
     assert merchant is not None, "Merchant was not created in the system"
     assert merchant.merchant_name == merchant_name, f"Expected merchant name {merchant_name}, but got {merchant.merchant_name}"
     assert merchant.id is not None, "Merchant ID should not be None"
+
+@then('the mcc should be created in the system')
+def step_impl(context):
+    response_data = context.response.json()
+    mcc_code = response_data['code']
+    category_id = response_data['category_id']
+    mcc = context.db.query(MccEntity).filter_by(code=mcc_code, category_id=category_id).first()
+    assert mcc is not None, "MCC was not created in the system"
+    assert mcc.code == mcc_code, f"Expected MCC code {mcc_code}, but got {mcc.code}"
+    assert mcc.category_id == category_id, f"Expected category ID {category_id}, but got {mcc.category_id}"
 
 @then('the response should contain an error message indicating the merchant validation failure')
 def step_impl(context):
@@ -75,3 +142,17 @@ def step_impl(context):
     assert 'detail' in response_data, "Response does not contain 'detail'"
     assert response_data['detail'] == f"Merchant with name {context.request_data["merchant_name"]} already exists.", \
         f"Expected error message 'Merchant with name {context.request_data["merchant_name"]} already exists.', but got {response_data['detail']}"
+
+@then('the response should contain an error message indicating that the mcc already exists')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == f"MCC with code {context.request_data['code']} already exists.", \
+        f"Expected error message 'MCC with code {context.request_data['code']} already exists.', but got {response_data['detail']}"
+
+@then('the response should contain an error message indicating the mcc validation failure')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'detail' in response_data, "Response does not contain 'detail'"
+    assert response_data['detail'] == "MCC code must be 4 characters long", \
+        f"Expected error message 'MCC code must be 4 characters long', but got {response_data['detail']}"

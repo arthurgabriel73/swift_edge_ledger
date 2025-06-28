@@ -1,6 +1,6 @@
 [run]
 source = src
-omit = */tests/*
+omit = */test/*
 branch = True
 
 [report]

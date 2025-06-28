@@ -1,5 +1,7 @@
+from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
+from src.main.merchant.domain.mcc import Mcc
 from src.main.merchant.domain.mcc_id import MccId
 from src.main.merchant.domain.merchant import Merchant
 from src.main.merchant.domain.merchant_id import MerchantId
@@ -49,8 +51,8 @@ class MerchantEntity(Base):
     __tablename__ = 'merchants'
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
-    merchant_name: Mapped[str] = mapped_column(nullable=False)
-    mcc_id: Mapped[UUID] = mapped_column(nullable=False)
+    merchant_name: Mapped[str] = mapped_column(nullable=False, unique=True)
+    mcc_id: Mapped[UUID] = mapped_column(ForeignKey("mcc.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(nullable=False)
 
     def to_domain(self):
@@ -75,5 +77,38 @@ class MerchantEntity(Base):
             'id': str(self.id),
             'merchant_name': self.merchant_name,
             'mcc_id': self.mcc_id,
+            'created_at': self.created_at.isoformat()
+        }
+
+class MccEntity(Base):
+    __tablename__ = 'mcc'
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(nullable=False, unique=True)
+    category_id: Mapped[int] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(nullable=False)
+
+    def to_domain(self):
+        return Mcc.from_value(
+            mcc_id=MccId(self.id),
+            code=self.code,
+            category_id=self.category_id,
+            created_at=self.created_at
+        )
+
+    @classmethod
+    def from_domain(cls, mcc) -> 'MccEntity':
+        return cls(
+            id=mcc.id.value(),
+            code=mcc.code,
+            category_id=mcc.category_id,
+            created_at=datetime.now()
+        )
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'code': self.code,
+            'category_id': self.category_id,
             'created_at': self.created_at.isoformat()
         }
