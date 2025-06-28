@@ -50,7 +50,7 @@ jobs:
     - name: Run Pytest with coverage
       run: |
         echo "Using environment: $ENV"
-        poetry run coverage run --source=./ -m pytest -v
+        poetry run pytest --cov --cov-branch --cov-report=xml
         poetry run coverage report --fail-under=80
 
     - name: Run Behave with coverage
@@ -63,11 +63,7 @@ jobs:
       run: |
         poetry run coverage html
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-
-    - name: Upload HTML coverage report as artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
       with:
-        name: coverage-report
-        path: htmlcov
+        token: ${{ secrets.CODECOV_TOKEN }}
