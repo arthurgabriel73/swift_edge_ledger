@@ -12,20 +12,19 @@ Feature: Merchant
     And the response should contain the merchant details
     And the merchant should be created in the system
 
-# Fail
-#  Scenario: Create a merchant registration with invalid data
-#    Given I have an invalid merchant registration request
-#    When I send the request to create a new merchant registration
-#    Then I should receive a response with status code 400
-#    And the response should contain an error message indicating the merchant validation failure
+  Scenario: Create a merchant registration with invalid data
+    Given I have an invalid merchant registration request
+    When I send the request to create a new merchant registration
+    Then I should receive a response with status code 400
+    And the response should contain an error message indicating the merchant validation failure
 
-# Fail
-#  Scenario: Create a merchant registration with already existing merchant name
-#    Given the system has an existing mcc registration
-#    And I have a merchant registration request with an existing merchant name
-#    When I send the request to create a new merchant registration
-#    Then I should receive a response with status code 409
-#    And the response should contain an error message indicating that the merchant already exists
+  Scenario: Create a merchant registration with already existing merchant name
+    Given the system has an existing category registration
+    And the system has an existing mcc registration for the category
+    And I have a merchant registration request with an existing merchant name
+    When I send the request to create a new merchant registration
+    Then I should receive a response with status code 409
+    And the response should contain an error message indicating that the merchant already exists
 
 # Fail
 #  Scenario: Create a mcc
