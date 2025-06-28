@@ -9,6 +9,7 @@ class InMemoryCategoryRepository(CategoryRepository):
         self.categories: List[Category] = []
 
     def save(self, category: Category) -> Category:
+        category.id = len(self.categories) + 1
         self.categories.append(self.to_new_instance(category))
         return self.to_new_instance(category)
 

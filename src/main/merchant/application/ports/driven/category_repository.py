@@ -8,7 +8,7 @@ class CategoryRepository(ABC):
     pass
 
     @abstractmethod
-    def save(self, category: Category) -> None:
+    def save(self, category: Category) -> Category:
         pass
 
     @abstractmethod
