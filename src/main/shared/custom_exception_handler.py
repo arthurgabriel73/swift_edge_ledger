@@ -12,8 +12,8 @@ async def value_error_exception_handler(request, exc):
     )
 
 @app.exception_handler(AccountConflictException)
-async def account_conflict_exception_handler(request, exc: AccountConflictException):
+async def account_conflict_exception_handler(request, exc):
     return JSONResponse(
         status_code=409,
-        content={"detail": exc.message}
+        content={"detail": str(exc.message)}
     )

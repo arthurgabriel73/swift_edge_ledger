@@ -74,8 +74,8 @@ def step_impl(context):
 def step_impl(context):
     response_data = context.response.json()
     assert 'detail' in response_data, "Response does not contain 'detail'"
-    assert response_data['detail'] == "Invalid account number", \
-        f"Expected error message 'Invalid account number', but got {response_data['detail']}"
+    assert response_data['detail'] == "Account number must be between 4 and 20 characters long", \
+        f"Expected error message 'Account number must be between 4 and 20 characters long', but got {response_data['detail']}"
 
 @then('I should receive a response with status code 409')
 def step_impl(context):
