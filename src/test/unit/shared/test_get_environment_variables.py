@@ -10,7 +10,7 @@ class TestGetEnvironmentVariables:
         assert env.APP_PORT == 3000
         assert env.DATABASE_DIALECT == 'postgresql+psycopg'
         assert env.DATABASE_HOST == 'localhost'
-        assert env.DATABASE_NAME == 'tests'
-        assert env.DATABASE_PASSWORD == 'postgres'
+        assert env.DATABASE_NAME == 'swift_edge_ledger_db'
+        assert env.DATABASE_PASSWORD == 'password'
         assert env.DATABASE_PORT == 5432
         assert env.DATABASE_USER == 'postgres'
