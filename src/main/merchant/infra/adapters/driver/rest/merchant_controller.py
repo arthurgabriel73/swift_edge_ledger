@@ -16,7 +16,7 @@ merchants_router = APIRouter(
 
 @merchants_router.post("/", status_code=201)
 @transactional
-def save_merchant(request: SaveMerchantRequest) -> SaveMerchantCommandOutput:
+def save_merchant(request: SaveMerchantRequest):
     driver: SaveMerchantDriverPort = save_merchant_driver_factory()
     command = SaveMerchantCommand(
         merchant_name=request.merchant_name,

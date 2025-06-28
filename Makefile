@@ -12,6 +12,7 @@ unit:
 	export ENV=test
 	export PYTHONPATH=$(pwd)
 	poetry run coverage run --source=./ -m pytest -v
+	poetry run coverage report --fail-under=80
 	@echo "\033[0;32mUnit tests completed successfully!\033[0m"
 
 bdd: test-db
@@ -19,6 +20,7 @@ bdd: test-db
 	export ENV=test
 	export PYTHONPATH=$(pwd)
 	poetry run coverage run --source=./ -m behave
+	poetry run coverage report --fail-under=80
 	@echo "\033[0;32mBDD tests completed successfully!\033[0m"
 
 test-db:
