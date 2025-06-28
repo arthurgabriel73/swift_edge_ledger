@@ -12,15 +12,14 @@ class TestCategory:
 
     def test_use_create_method(self):
         # Arrange
-        category_id = 123
         code = "FOOD"
         description = "A food category"
 
         # Act
-        category = Category.create(category_id, code, description)
+        category = Category.create(code, description)
 
         # Assert
-        assert category.id == category_id
+        assert category.id is None
         assert category.code == code
         assert category.description == description
         assert category.created_at is not None
