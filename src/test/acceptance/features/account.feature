@@ -9,3 +9,9 @@ Feature: Account
     Then I should receive a response with status code 201
     And the response should contain the account details
     And the account should be created in the system
+
+  Scenario: Create an account with invalid data
+    Given I have an invalid account creation request
+    When I send the request to create a new account
+    Then I should receive a response with status code 400
+    And the response should contain an error message indicating the validation failure

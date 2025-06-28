@@ -15,6 +15,15 @@ def step_impl(context):
         "Content-Type": "application/json"
     }
 
+@given('I have an invalid account creation request')
+def step_impl(context):
+    context.request_data = {
+        "account_number": "",  # Invalid account number
+    }
+    context.headers = {
+        "Content-Type": "application/json"
+    }
+
 @when('I send the request to create a new account')
 def step_impl(context):
     context.response = context.client.post('/accounts', json=context.request_data, headers=context.headers)
@@ -22,6 +31,10 @@ def step_impl(context):
 @then('I should receive a response with status code 201')
 def step_impl(context):
     assert context.response.status_code == 201, f"Expected status code 201, but got {context.response.status_code}"
+
+@then('I should receive a response with status code 400')
+def step_impl(context):
+    assert context.response.status_code == 400, f"Expected status code 400, but got {context.response.status_code}"
 
 @then('the response should contain the account details')
 def step_impl(context):
@@ -40,3 +53,11 @@ def step_impl(context):
     assert account is not None, "Account was not created in the system"
     assert account.account_number == context.request_data['account_number'], \
         f"Expected account number {context.request_data['account_number']}, but got {account.account_number}"
+
+@then('the response should contain an error message indicating the validation failure')
+def step_impl(context):
+    response_data = context.response.json()
+    assert 'error' in response_data, "Response does not contain 'error'"
+    assert 'message' in response_data['error'], "Error message is missing"
+    assert response_data['error']['message'] == "Invalid account number", \
+        f"Expected error message 'Invalid account number', but got {response_data['error']['message']}"
