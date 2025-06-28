@@ -1,4 +1,4 @@
-from main.merchant.application.use_cases.exceptions.application_exception import ApplicationException
+from src.main.shared.application.exceptions.application_exception import ApplicationException
 
 
 class MerchantConflictException(ApplicationException):
