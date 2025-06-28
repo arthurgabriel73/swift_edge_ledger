@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from src.main.merchant.application.ports.driver.commands.save_merchant_command_output import SaveMerchantCommandOutput
 from src.main.merchant.application.ports.driver.commands.save_merchant_command import SaveMerchantCommand
 from src.main.merchant.application.ports.driver.save_merchant_driver_port import SaveMerchantDriverPort
 from src.main.merchant.infra.adapters.driver.rest.request.save_merchant_request import SaveMerchantRequest
@@ -15,7 +16,7 @@ merchants_router = APIRouter(
 
 @merchants_router.post("/", status_code=201)
 @transactional
-def save_merchant(request: SaveMerchantRequest):
+def save_merchant(request: SaveMerchantRequest) -> SaveMerchantCommandOutput:
     driver: SaveMerchantDriverPort = save_merchant_driver_factory()
     command = SaveMerchantCommand(
         merchant_name=request.merchant_name,
