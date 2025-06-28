@@ -15,3 +15,9 @@ Feature: Account
     When I send the request to create a new account
     Then I should receive a response with status code 400
     And the response should contain an error message indicating the validation failure
+
+  Scenario: Create an account with already existing account number
+    Given I have an account creation request with an existing account number
+    When I send the request to create a new account
+    Then I should receive a response with status code 409
+    And the response should contain an error message indicating that the account already exists
