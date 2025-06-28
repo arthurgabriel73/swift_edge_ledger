@@ -41,6 +41,7 @@ jobs:
 
     - name: Setup acceptance test database
       run: |
+        export ENV=test
         make test-db
 
     - name: Run Pytest with coverage
