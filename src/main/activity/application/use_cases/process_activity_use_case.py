@@ -9,8 +9,8 @@ from src.main.activity.domain.account_balance import AccountBalance
 from src.main.activity.application.ports.driven.account_balance_repository import AccountBalanceRepository
 from src.main.activity.application.ports.driven.activity_repository import ActivityRepository
 from src.main.activity.application.ports.driven.merchant_gateway import MerchantGateway
-from main.activity.application.ports.driver.commands.process_activity_command import ProcessActivityCommand
-from main.activity.application.ports.driver.commands.process_activity_command_output import ProcessActivityCommandOutput
+from src.main.activity.application.ports.driver.commands.process_activity_command import ProcessActivityCommand
+from src.main.activity.application.ports.driver.commands.process_activity_command_output import ProcessActivityCommandOutput
 from src.main.activity.application.ports.driver.process_activity_driver_port import ProcessActivityDriverPort
 
 

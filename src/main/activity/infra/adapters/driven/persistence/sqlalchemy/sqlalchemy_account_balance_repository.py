@@ -5,7 +5,7 @@ from sqlalchemy import Table
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
-from main.shared.database.sqlalchemy.models import AccountBalanceEntity, AccountEntity
+from src.main.shared.database.sqlalchemy.models import AccountBalanceEntity, AccountEntity
 from src.main.activity.application.ports.driven.account_balance_repository import AccountBalanceRepository
 from src.main.activity.domain.account_balance import AccountBalance
 from src.main.shared.persistence_decorators import repository

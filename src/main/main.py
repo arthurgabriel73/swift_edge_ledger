@@ -2,6 +2,7 @@ import uvicorn
 
 from fastapi import FastAPI
 
+from src.main.activity.infra.adapters.driver.rest.account_balance_controller import account_balances_router
 from src.main.activity.infra.adapters.driver.rest.activity_controller import activities_router
 from src.main.merchant.infra.adapters.driver.rest.category_controller import categories_router
 from src.main.merchant.infra.adapters.driver.rest.mcc_controller import mcc_router
@@ -28,6 +29,8 @@ app.include_router(mcc_router)
 app.include_router(categories_router)
 
 app.include_router(activities_router)
+
+app.include_router(account_balances_router)
 
 if __name__ == '__main__':
     env = get_environment_variables()
