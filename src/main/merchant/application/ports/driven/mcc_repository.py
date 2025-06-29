@@ -6,7 +6,6 @@ from src.main.merchant.domain.mcc_id import MccId
 
 
 class MccRepository(ABC):
-    pass
 
     @abstractmethod
     def save(self, mcc: Mcc) -> Mcc:

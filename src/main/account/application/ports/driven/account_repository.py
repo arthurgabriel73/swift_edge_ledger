@@ -7,7 +7,6 @@ from src.main.account.domain.account_number import AccountNumber
 
 
 class AccountRepository(ABC):
-    pass
 
     @abstractmethod
     def save(self, account: Account) -> Account:

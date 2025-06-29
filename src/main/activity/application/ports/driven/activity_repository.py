@@ -6,7 +6,6 @@ from src.main.activity.domain.activity_id import ActivityId
 
 
 class ActivityRepository(ABC):
-    pass
 
     @abstractmethod
     def save(self, activity: Activity) -> Activity:

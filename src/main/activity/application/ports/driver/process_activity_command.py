@@ -1,9 +1,11 @@
 class ProcessActivityCommand:
-    def __init__(self, account: str, amount_in_cents: int, mcc: str, merchant: str):
+    def __init__(self, *, account: str, amount_in_cents: int, mcc: str, merchant: str, merchant_priority: bool = False, fallback: bool = False):
         self.account = account
         self.amount_in_cents = amount_in_cents
         self.mcc = mcc
         self.merchant = merchant
+        self.merchant_priority = merchant_priority
+        self.fallback = fallback
 
     @staticmethod
     def validate_account(account: str):
@@ -28,3 +30,13 @@ class ProcessActivityCommand:
             raise ValueError("Invalid merchant")
         if len(merchant) < 3 or len(merchant) > 100:
             raise ValueError("Merchant name must be between 3 and 100 characters long")
+
+    @staticmethod
+    def validate_merchant_priority(merchant_priority: bool):
+        if not isinstance(merchant_priority, bool):
+            raise ValueError("Merchant priority must be a boolean value")
+
+    @staticmethod
+    def validate_fallback(fallback: bool):
+        if not isinstance(fallback, bool):
+            raise ValueError("Fallback must be a boolean value")

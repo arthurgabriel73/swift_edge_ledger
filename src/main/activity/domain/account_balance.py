@@ -15,6 +15,15 @@ class AccountBalance:
         self.amount_in_cents = amount_in_cents
         self.version = version
 
+    def withdraw(self, amount_in_cents: int) -> bool:
+        if self._may_withdraw(amount_in_cents):
+            self.amount_in_cents -= amount_in_cents
+            return True
+        return False
+
+    def _may_withdraw(self, amount_in_cents: int) -> bool:
+        return self.amount_in_cents >= amount_in_cents
+
     @classmethod
     def create(cls, account_id: UUID, category_id: int, amount_in_cents: int) -> 'AccountBalance':
         cls.__allow_instantiation = True
