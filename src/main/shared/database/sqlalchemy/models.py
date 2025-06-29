@@ -203,7 +203,9 @@ class AccountBalanceEntity(Base):
     account_id: Mapped[UUID] = mapped_column(ForeignKey("accounts.id"), nullable=False)
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False)
     amount_in_cents: Mapped[int] = mapped_column(nullable=False)
-    version: Mapped[int] = mapped_column(nullable=False)
+    version: Mapped[int] = mapped_column(nullable=False, default=1)
+
+    account: Mapped[AccountEntity] = mapped_column(ForeignKey("accounts.id"), nullable=False)
 
     def to_domain(self):
         return AccountBalance.from_value(

@@ -24,7 +24,7 @@ class SqlAlchemyActivityRepository(ActivityRepository):
         if session is None:
             raise ValueError("Session must be provided for finding the activity by ID.")
 
-        query = session.query(ActivityEntity).filter(ActivityEntity.id == activity_id.value())
+        query = session.query(ActivityEntity).where(ActivityEntity.id == activity_id.value())
         activity_entity = session.execute(query).scalars().unique().one_or_none()
         if activity_entity is None:
             return None

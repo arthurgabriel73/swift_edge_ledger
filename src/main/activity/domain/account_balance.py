@@ -18,6 +18,7 @@ class AccountBalance:
     def withdraw(self, amount_in_cents: int) -> bool:
         if self._may_withdraw(amount_in_cents):
             self.amount_in_cents -= amount_in_cents
+            self.version += 1
             return True
         return False
 
