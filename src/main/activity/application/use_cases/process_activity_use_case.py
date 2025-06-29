@@ -1,8 +1,8 @@
 from uuid import uuid4, UUID
 from typing import Optional
 import logging
-from main.activity.domain.activity import Activity
-from main.activity.domain.activity_id import ActivityId
+from src.main.activity.domain.activity import Activity
+from src.main.activity.domain.activity_id import ActivityId
 from src.main.activity.domain.activity_status import ActivityStatus
 from src.main.shared.application.constants import CASH_CATEGORY_CODE
 from src.main.activity.domain.account_balance import AccountBalance

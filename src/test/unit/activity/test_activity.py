@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from main.activity.domain.activity_status import ActivityStatus
+from src.main.activity.domain.activity_status import ActivityStatus
 from src.main.activity.domain.activity import Activity
 from src.main.activity.domain.activity_id import ActivityId
 from src.main.shared.date_util import get_utc_now

@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from main.activity.domain.account_balance import AccountBalance
+from src.main.activity.domain.account_balance import AccountBalance
 
 
 class TestAccountBalance:

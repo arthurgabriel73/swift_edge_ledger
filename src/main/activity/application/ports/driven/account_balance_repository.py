@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from uuid import UUID
 
-from main.activity.domain.account_balance import AccountBalance
+from src.main.activity.domain.account_balance import AccountBalance
 
 
 class AccountBalanceRepository(ABC):
