@@ -2,6 +2,7 @@ import uvicorn
 
 from fastapi import FastAPI
 
+from src.main.activity.infra.adapters.driver.rest.activity_controller import activities_router
 from src.main.merchant.infra.adapters.driver.rest.category_controller import categories_router
 from src.main.merchant.infra.adapters.driver.rest.mcc_controller import mcc_router
 from src.main.shared.environment_settings import get_environment_variables
@@ -15,7 +16,7 @@ app = FastAPI(
     description=description
 )
 
-from src.main.shared.custom_exception_handler import * # important: custom exception handlers
+from src.main.shared.custom_exception_handler import * # important: to load custom exception handlers
 
 @app.get('/')
 def root():
@@ -25,6 +26,8 @@ app.include_router(accounts_router)
 app.include_router(merchants_router)
 app.include_router(mcc_router)
 app.include_router(categories_router)
+
+app.include_router(activities_router)
 
 if __name__ == '__main__':
     env = get_environment_variables()
