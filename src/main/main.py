@@ -23,10 +23,10 @@ from src.main.shared.custom_exception_handler import * # important: to load cust
 async def read_root():
     return _responses.RedirectResponse("/docs")
 
-app.include_router(accounts_router)
 app.include_router(categories_router)
 app.include_router(mcc_router)
 app.include_router(merchants_router)
+app.include_router(accounts_router)
 app.include_router(account_balances_router)
 app.include_router(activities_router)
 
