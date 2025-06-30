@@ -1,4 +1,5 @@
 include .env.test
+include .env.local
 
 .PHONY: build up down clean remove-image logs
 
@@ -34,3 +35,16 @@ test-db:
 		-e POSTGRES_DB=$(DATABASE_NAME_VALUE) \
 		postgres:16.3
 	@echo "\033[0;32mSetup completed successfully!\033[0m"
+
+local-db:
+	@echo "\033[0;36mStarting local database...\033[0m"
+	export ENV=local
+	export PYTHONPATH=$(pwd)
+	docker rm -f local-db || true
+	docker rm -f test-db || true
+	docker run -d --name local-db -p $(DATABASE_PORT_VALUE):$(DATABASE_PORT_VALUE) \
+		-e POSTGRES_USER=$(DATABASE_USER_VALUE) \
+		-e POSTGRES_PASSWORD=$(DATABASE_PASSWORD_VALUE) \
+		-e POSTGRES_DB=$(DATABASE_NAME_VALUE) \
+		postgres:16.3
+	@echo "\033[0;32mLocal database started successfully!\033[0m"
