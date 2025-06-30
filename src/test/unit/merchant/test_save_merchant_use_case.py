@@ -2,8 +2,8 @@ import uuid
 
 import pytest
 
-from main.merchant.domain.mcc import Mcc
-from main.merchant.domain.mcc_id import MccId
+from src.main.merchant.domain.mcc import Mcc
+from src.main.merchant.domain.mcc_id import MccId
 from src.main.merchant.infra.adapters.driven.persistence.in_memory_mcc_repository import InMemoryMccRepository
 from src.main.merchant.application.ports.driven.mcc_repository import MccRepository
 from src.main.merchant.application.ports.driver.commands.save_merchant_command import SaveMerchantCommand
