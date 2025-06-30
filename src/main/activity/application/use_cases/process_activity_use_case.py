@@ -1,3 +1,4 @@
+import traceback
 from uuid import uuid4, UUID
 from typing import Optional
 import logging
@@ -35,6 +36,7 @@ class ProcessActivityUseCase(ProcessActivityDriverPort):
             return ProcessActivityCommandOutput(code = activity_status, activity_id=activity.id.value() if activity else None)
         except Exception as e:
             logging.error(f"Error processing activity: {e}")
+            logging.error(traceback.format_exc())
             self._save_activity(command.amount_in_cents, ActivityStatus.ERROR)
             return ProcessActivityCommandOutput(code=ActivityStatus.ERROR, activity_id=None)
 

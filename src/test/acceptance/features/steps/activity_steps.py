@@ -2,7 +2,6 @@ import uuid
 
 from behave import given, when, then
 
-from src.main.activity.domain.activity_status import ActivityStatus
 from src.main.shared.database.sqlalchemy.models import CategoryEntity, MccEntity, MerchantEntity, AccountEntity, \
     AccountBalanceEntity, ActivityEntity
 from src.main.shared.date_util import get_utc_now
@@ -10,12 +9,13 @@ from src.main.shared.date_util import get_utc_now
 
 @given('the system has an existing category registration with code "{code}" and description "{description}"')
 def step_impl(context, code, description):
-    context.existing_category = CategoryEntity(
+    category = CategoryEntity(
         code=code,
         description=description,
         created_at=get_utc_now(),
     )
-    context.db.add(context.existing_category)
+    setattr(context, f"category_{code}", category)
+    context.db.add(category)
     context.db.commit()
 
 
@@ -24,7 +24,7 @@ def step_impl(context, code, category):
     context.existing_mcc = MccEntity(
         id=uuid.uuid4(),
         code=code,
-        category_id=context.existing_category.id,
+        category_id=getattr(context, f"category_{category}").id,
         created_at=get_utc_now(),
     )
     context.db.add(context.existing_mcc)
@@ -51,19 +51,21 @@ def step_impl(context, account_number):
 def step_impl(context, account_number, category, amount):
     context.existing_account_balance = AccountBalanceEntity(
         account_id=context.existing_account.id,
-        category_id=context.existing_category.id,
+        category_id=getattr(context, f"category_{category}").id,
         amount_in_cents=amount
     )
     context.db.add(context.existing_account_balance)
     context.db.commit()
 
-@when('I send an activity request with the user account "{account}" authorizes a credit card activity with amount in cents "{amount}" for merchant "{merchant_name}" with mcc code "{mcc_code}"')
-def step_impl(context, account, amount, merchant_name, mcc_code):
+@when('I send an activity request with the user account "{account}" authorizes a credit card activity with amount in cents "{amount}" for merchant "{merchant_name}" with mcc code "{mcc_code}", with fallback "{fallback}" and merchant priority "{merchant_priority}"')
+def step_impl(context, account, amount, merchant_name, mcc_code, fallback, merchant_priority):
     context.request_data = {
         "account": account,
         "amount_in_cents": amount,
         "mcc": mcc_code,
         "merchant": merchant_name,
+        "fallback": fallback.lower() == 'true',
+        "merchant_priority": merchant_priority.lower() == 'true'
     }
 
     context.headers = {
@@ -89,8 +91,8 @@ def step_impl(context, amount, category, status):
     assert activity.account_id == context.existing_account.id, \
         f"Expected account {context.existing_account.id}, but got {activity.account_id}"
     assert activity.amount_in_cents == int(amount), f"Expected amount {amount}, but got {activity.amount_in_cents}"
-    assert activity.category_id == context.existing_category.id, \
-        f"Expected category {context.existing_category.id}, but got {activity.category_id}"
+    assert activity.category_id == getattr(context, f"category_{category}").id, \
+        f"Expected category {getattr(context, f"category_{category}").id}, but got {activity.category_id}"
     assert activity.merchant_id == context.existing_merchant.id, \
         f"Expected merchant {context.existing_merchant.id}, but got {activity.merchant_id}"
     assert activity.status == status, f"Expected status {status}, but got {activity.status}"
@@ -100,7 +102,7 @@ def step_impl(context, amount, category, status):
 def step_impl(context, amount, account_number, category):
     account_balance = context.db.query(AccountBalanceEntity).filter(
         AccountBalanceEntity.account_id == context.existing_account.id,
-        AccountBalanceEntity.category_id == context.existing_category.id
+        AccountBalanceEntity.category_id == getattr(context, f"category_{category}").id
     ).first()
 
     assert account_balance is not None, "Account balance was not updated in the system"
