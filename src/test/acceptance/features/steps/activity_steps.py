@@ -79,8 +79,8 @@ def step_impl(context, code):
     assert 'activity_id' in response_data, "Response does not contain 'activity_id'"
     assert response_data['code'] == code, f"Expected code {code}, but got {response_data['code']}"
 
-@then('the system should record the activity with amount in cents "{amount}" and category "{category}"')
-def step_impl(context, amount, category):
+@then('the system should record the activity with amount in cents "{amount}" and category "{category}" with the status "{status}"')
+def step_impl(context, amount, category, status):
     response_data = context.response.json()
     query = context.db.query(ActivityEntity).where(ActivityEntity.id == response_data['activity_id'])
     activity = context.db.execute(query).scalars().unique().one_or_none()
@@ -93,10 +93,10 @@ def step_impl(context, amount, category):
         f"Expected category {context.existing_category.id}, but got {activity.category_id}"
     assert activity.merchant_id == context.existing_merchant.id, \
         f"Expected merchant {context.existing_merchant.id}, but got {activity.merchant_id}"
-    assert activity.status == ActivityStatus.APPROVED.value, f"Expected status {ActivityStatus.APPROVED.value}, but got {activity.status}"
+    assert activity.status == status, f"Expected status {status}, but got {activity.status}"
 
 
-@then('the account balance amount in cents should be updated to "{amount}" for the user account "{account_number}" and category "{category}"')
+@then('the account balance amount in cents should be "{amount}" for the user account "{account_number}" and category "{category}"')
 def step_impl(context, amount, account_number, category):
     account_balance = context.db.query(AccountBalanceEntity).filter(
         AccountBalanceEntity.account_id == context.existing_account.id,
