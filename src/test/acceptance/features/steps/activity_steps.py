@@ -87,10 +87,6 @@ def step_impl(context, amount, category, status):
     response_data = context.response.json()
     query = context.db.query(ActivityEntity).where(ActivityEntity.id == response_data['activity_id'])
     activity = context.db.execute(query).scalars().unique().one_or_none()
-    print(f"Activity: {activity.to_dict()}")
-    print(f"Category: {getattr(context, f'category_CASH').to_dict()}")
-    print(f"Category: {getattr(context, f'category_FOOD').to_dict()}")
-    print(f"Category: {getattr(context, f'category_DRUGSTORE').to_dict()}")
     assert activity is not None, "Activity was not recorded in the system"
     assert activity.timestamp is not None, "Activity was not recorded in the system"
     assert activity.account_id == context.existing_account.id, \
