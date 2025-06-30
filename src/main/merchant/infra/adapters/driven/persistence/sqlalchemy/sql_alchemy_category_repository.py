@@ -38,3 +38,11 @@ class SqlAlchemyCategoryRepository(CategoryRepository):
         if category_entity is None:
             return None
         return category_entity.to_domain()
+
+    def list_all(self, session: Optional[Session] = None) -> list[Category]:
+        if session is None:
+            raise ValueError("Session must be provided for listing all categories.")
+
+        query = select(CategoryEntity)
+        category_entities = session.execute(query).scalars().all()
+        return [category_entity.to_domain() for category_entity in category_entities]

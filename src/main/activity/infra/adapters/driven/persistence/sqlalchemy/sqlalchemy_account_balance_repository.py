@@ -13,15 +13,12 @@ from src.main.shared.persistence_decorators import repository
 
 @repository
 class SqlAlchemyAccountBalanceRepository(AccountBalanceRepository):
-
-
     def save(self, account_balance: AccountBalance, session: Optional[Session] = None) -> AccountBalance:
         if session is None:
             raise ValueError("Session must be provided for saving the account balance.")
 
         account_balance_entity = AccountBalanceEntity.from_domain(account_balance)
-        table = Table('account_balances', AccountBalanceEntity.metadata)
-        session.execute(table.insert(), [account_balance_entity.to_dict()])
+        session.add(account_balance_entity)
         return account_balance_entity.to_domain()
 
     def find_by_account_and_category_id(self, account: str, category_id: int, session: Optional[Session] = None) -> Optional[AccountBalance]:

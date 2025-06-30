@@ -12,7 +12,7 @@ class SaveCategoryUseCase(SaveCategoryDriverPort):
     def execute(self, command):
         self.require_category_code_does_not_exist(command.code)
         created_category = self.category_repository.save(Category.create(command.code, command.description))
-        return SaveCategoryCommandOutput(category_id=created_category.id, code=created_category.code, description=created_category.description)
+        return SaveCategoryCommandOutput(code=created_category.code, description=created_category.description)
 
     def require_category_code_does_not_exist(self, code):
         existing_category = self.category_repository.find_by_code(code)

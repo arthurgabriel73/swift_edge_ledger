@@ -17,3 +17,7 @@ class CategoryRepository(ABC):
     @abstractmethod
     def find_by_code(self, code: str) -> Optional[Category]:
         pass
+
+    @abstractmethod
+    def list_all(self) -> list[Category]:
+        pass
