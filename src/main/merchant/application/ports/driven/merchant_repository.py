@@ -7,7 +7,6 @@ from src.main.merchant.domain.merchant import Merchant
 
 
 class MerchantRepository(ABC):
-    pass
 
     @abstractmethod
     def save(self, merchant: Merchant) -> Merchant:

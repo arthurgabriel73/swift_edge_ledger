@@ -16,11 +16,11 @@ from src.main.merchant.infra.adapters.driven.persistence.sqlalchemy.sqlalchemy_m
 
 @lru_cache
 def save_merchant_driver_factory() -> SaveMerchantDriverPort:
-    return SaveMerchantUseCase(merchant_repository=SqlAlchemyMerchantRepository())
+    return SaveMerchantUseCase(merchant_repository=SqlAlchemyMerchantRepository(), mcc_repository=SqlAlchemyMccRepository())
 
 @lru_cache
 def save_mcc_driver_factory() -> SaveMccDriverPort:
-    return SaveMccUseCase(mcc_repository=SqlAlchemyMccRepository())
+    return SaveMccUseCase(mcc_repository=SqlAlchemyMccRepository(), category_repository=SqlAlchemyCategoryRepository())
 
 @lru_cache
 def save_category_driver_factory() -> SaveCategoryDriverPort:

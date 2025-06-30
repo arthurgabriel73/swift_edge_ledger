@@ -1,6 +1,12 @@
+from typing import Optional
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
+from src.main.activity.domain.account_balance import AccountBalance
+from src.main.activity.domain.activity import Activity
+from src.main.activity.domain.activity_id import ActivityId
+from src.main.activity.domain.activity_status import ActivityStatus
 from src.main.merchant.domain.category import Category
 from src.main.merchant.domain.mcc import Mcc
 from src.main.merchant.domain.mcc_id import MccId
@@ -145,4 +151,88 @@ class CategoryEntity(Base):
             'code': self.code,
             'description': self.description,
             'created_at': self.created_at.isoformat()
+        }
+
+class ActivityEntity(Base):
+    __tablename__ = 'activities'
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    timestamp: Mapped[datetime] = mapped_column(nullable=False)
+    account_id: Mapped[UUID] = mapped_column(ForeignKey("accounts.id"), nullable=False)
+    amount_in_cents: Mapped[int] = mapped_column(nullable=False)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False)
+    merchant_id: Mapped[UUID] = mapped_column(ForeignKey("merchants.id"), nullable=False)
+    status: Mapped[str] = mapped_column(nullable=False)
+
+    def to_domain(self) -> Activity:
+        return Activity.from_value(
+            activity_id=ActivityId(self.id),
+            timestamp=self.timestamp,
+            account_id=self.account_id,
+            amount_in_cents=self.amount_in_cents,
+            category_id=self.category_id,
+            merchant_id=self.merchant_id,
+            status= ActivityStatus(self.status),
+        )
+
+    @classmethod
+    def from_domain(cls, activity: Activity) -> 'ActivityEntity':
+        return cls(
+            id=activity.id.value(),
+            timestamp=activity.timestamp,
+            account_id=activity.account_id,
+            amount_in_cents=activity.amount_in_cents,
+            category_id=activity.category_id,
+            merchant_id=activity.merchant_id,
+            status=activity.status.value
+        )
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'timestamp': self.timestamp.isoformat(),
+            'account_id': str(self.account_id),
+            'amount_in_cents': self.amount_in_cents,
+            'category_id': self.category_id,
+            'merchant_id': str(self.merchant_id),
+            'status': self.status
+        }
+
+class AccountBalanceEntity(Base):
+    __tablename__ = 'account_balances'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    account_id: Mapped[UUID] = mapped_column(ForeignKey("accounts.id"), nullable=False)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False)
+    amount_in_cents: Mapped[int] = mapped_column(nullable=False)
+    version: Mapped[int] = mapped_column(nullable=False, default=1)
+
+    account: Mapped[Optional[AccountEntity]] = mapped_column(ForeignKey("accounts.id"))
+
+    def to_domain(self):
+        return AccountBalance.from_value(
+            account_balance_id=self.id,
+            account_id=self.account_id,
+            category_id=self.category_id,
+            amount_in_cents=self.amount_in_cents,
+            version=self.version
+        )
+
+    @classmethod
+    def from_domain(cls, account_balance: AccountBalance) -> 'AccountBalanceEntity':
+        return cls(
+            id=account_balance.id,
+            account_id=account_balance.account_id,
+            category_id=account_balance.category_id,
+            amount_in_cents=account_balance.amount_in_cents,
+            version=account_balance.version
+        )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'account_id': str(self.account_id),
+            'category_id': self.category_id,
+            'amount_in_cents': self.amount_in_cents,
+            'version': self.version
         }
