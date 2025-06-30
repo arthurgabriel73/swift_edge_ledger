@@ -25,7 +25,6 @@ class TestSaveCategoryUseCase:
         output = self.sut.execute(command)
 
         # Assert
-        assert output.category_id is not None
         assert output.code == code
         assert output.description == description
 

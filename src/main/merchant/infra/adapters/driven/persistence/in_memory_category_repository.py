@@ -21,5 +21,8 @@ class InMemoryCategoryRepository(CategoryRepository):
         found = next((category for category in self.categories if category.code == code), None)
         return self.to_new_instance(found) if found else None
 
+    def list_all(self) -> list[Category]:
+        return [self.to_new_instance(category) for category in self.categories]
+
     def to_new_instance(self, category: Category) -> Category:
         return Category.from_value(category_id=category.id, code=category.code, description=category.description, created_at=category.created_at)
