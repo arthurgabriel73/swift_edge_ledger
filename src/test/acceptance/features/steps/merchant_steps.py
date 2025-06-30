@@ -3,6 +3,7 @@ from datetime import datetime
 
 from behave import given, when, then
 
+from src.main.shared.date_util import get_utc_now
 from src.main.shared.database.sqlalchemy.models import MerchantEntity, MccEntity, CategoryEntity
 
 
@@ -11,7 +12,7 @@ def step_impl(context):
     context.existing_category = CategoryEntity(
         code="FOOD",
         description="This is a food category",
-        created_at=datetime.now()
+        created_at=get_utc_now()
     )
     context.db.add(context.existing_category)
     context.db.commit()
