@@ -21,13 +21,14 @@ def step_impl(context, code, description):
 
 @given('the system has an existing mcc registration with code "{code}" and category "{category}"')
 def step_impl(context, code, category):
-    context.existing_mcc = MccEntity(
+    mcc = MccEntity(
         id=uuid.uuid4(),
         code=code,
         category_id=getattr(context, f"category_{category}").id,
         created_at=get_utc_now(),
     )
-    context.db.add(context.existing_mcc)
+    setattr(context, f"mcc_{code}", mcc)
+    context.db.add(mcc)
     context.db.commit()
 
 @given('the system has and existing merchant registration with name merchant name "{merchant_name}" with mcc code "{mcc_code}"')
@@ -35,7 +36,7 @@ def step_impl(context, merchant_name, mcc_code):
     context.existing_merchant = MerchantEntity(
         id=uuid.uuid4(),
         merchant_name=merchant_name,
-        mcc_id=context.existing_mcc.id,
+        mcc_id=getattr(context, f"mcc_{mcc_code}").id,
         created_at=get_utc_now(),
     )
     context.db.add(context.existing_merchant)
@@ -86,6 +87,10 @@ def step_impl(context, amount, category, status):
     response_data = context.response.json()
     query = context.db.query(ActivityEntity).where(ActivityEntity.id == response_data['activity_id'])
     activity = context.db.execute(query).scalars().unique().one_or_none()
+    print(f"Activity: {activity.to_dict()}")
+    print(f"Category: {getattr(context, f'category_CASH').to_dict()}")
+    print(f"Category: {getattr(context, f'category_FOOD').to_dict()}")
+    print(f"Category: {getattr(context, f'category_DRUGSTORE').to_dict()}")
     assert activity is not None, "Activity was not recorded in the system"
     assert activity.timestamp is not None, "Activity was not recorded in the system"
     assert activity.account_id == context.existing_account.id, \
