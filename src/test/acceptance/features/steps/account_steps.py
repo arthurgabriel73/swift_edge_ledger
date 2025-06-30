@@ -3,6 +3,7 @@ from datetime import datetime
 
 from behave import given, when, then
 
+from src.main.shared.date_util import get_utc_now
 from src.main.shared.database.sqlalchemy.models import AccountEntity
 from faker import Faker
 
@@ -29,7 +30,7 @@ def step_impl(context):
 
 @given('I have an account creation request with an existing account number')
 def step_impl(context):
-    existing_account = AccountEntity(id=uuid.uuid4(), account_number=fake.credit_card_number(), created_at=datetime.now())
+    existing_account = AccountEntity(id=uuid.uuid4(), account_number=fake.credit_card_number(), created_at=get_utc_now())
     context.db.add(existing_account)
     context.db.commit()
 

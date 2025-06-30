@@ -60,10 +60,9 @@ class SqlAlchemyAccountBalanceRepository(AccountBalanceRepository):
             raise ValueError("Account balance must be provided for updating the account balance.")
 
         updated_account_balance_entity = AccountBalanceEntity.from_domain(account_balance)
-
         updated = session.query(AccountBalanceEntity).where(
             AccountBalanceEntity.id == account_balance.id,
-            AccountBalanceEntity.version == account_balance.version
+            AccountBalanceEntity.version == (account_balance.version - 1)
         ).update(updated_account_balance_entity.to_dict())
 
         if updated == 0:

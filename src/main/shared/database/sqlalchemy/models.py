@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -205,7 +207,7 @@ class AccountBalanceEntity(Base):
     amount_in_cents: Mapped[int] = mapped_column(nullable=False)
     version: Mapped[int] = mapped_column(nullable=False, default=1)
 
-    account: Mapped[AccountEntity] = mapped_column(ForeignKey("accounts.id"), nullable=False)
+    account: Mapped[Optional[AccountEntity]] = mapped_column(ForeignKey("accounts.id"))
 
     def to_domain(self):
         return AccountBalance.from_value(

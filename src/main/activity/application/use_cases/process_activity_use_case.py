@@ -31,12 +31,12 @@ class ProcessActivityUseCase(ProcessActivityDriverPort):
             if not result and command.fallback:
                 result = self._process_fallback(command)
             activity_status = ActivityStatus.APPROVED if result else ActivityStatus.REJECTED
-            self._save_activity(command.amount_in_cents, activity_status)
-            return ProcessActivityCommandOutput(code = activity_status)
+            activity = self._save_activity(command.amount_in_cents, activity_status)
+            return ProcessActivityCommandOutput(code = activity_status, activity_id=activity.id.value() if activity else None)
         except Exception as e:
             logging.error(f"Error processing activity: {e}")
             self._save_activity(command.amount_in_cents, ActivityStatus.ERROR)
-            return ProcessActivityCommandOutput(code=ActivityStatus.ERROR)
+            return ProcessActivityCommandOutput(code=ActivityStatus.ERROR, activity_id=None)
 
     def _set_merchant_id(self, merchant_name: str) -> None:
         merchant_id = self.merchant_gateway.find_merchant_id_by_name(merchant_name)
@@ -77,13 +77,15 @@ class ProcessActivityUseCase(ProcessActivityDriverPort):
         cash_category_id = self.merchant_gateway.get_category_id_by_code(CASH_CATEGORY_CODE)
         self._account_balance = self.account_balance_repository.find_by_account_and_category_id(account, cash_category_id)
 
-    def _save_activity(self, amount_in_cents: int, status: ActivityStatus) -> None:
-        if not self._account_balance or not self._merchant_id: return
-        self.activity_repository.save(Activity.create(
+    def _save_activity(self, amount_in_cents: int, status: ActivityStatus) -> Optional[Activity]:
+        if not self._account_balance or not self._merchant_id: return None
+        activity = Activity.create(
             activity_id=ActivityId(uuid4()),
             account_id=self._account_balance.account_id,
             amount_in_cents=amount_in_cents,
             category_id=self._account_balance.category_id,
             merchant_id=self._merchant_id,
             status=status
-        ))
+        )
+        self.activity_repository.save(activity)
+        return activity
