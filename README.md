@@ -12,8 +12,10 @@
 * [Technology Stack](#technology-stack)
 * [Domain-Driven Design](#domain-driven-design)
 * [System Design](#system-design)
+* [Database Design](#database-design)
 * [Architecture](#architecture)
-* [Installation](#installation)
+* [CI/CD](#cicd)
+* [Executing the project](#executing-the-project)
 * [API Documentation](#api-documentation)
 * [Testing](#testing)
 
@@ -67,6 +69,7 @@ The CI/CD pipeline is set up to ensure that the code is tested and deployed auto
 - Testing with Pytest and Behave, failing if the coverage is below 80%.
 - Code coverage reporting with Codecov.
 
+[Go to page beginning](#swift_edge_ledger)
 ## Executing the project
 ### Prerequisites
 
@@ -74,4 +77,59 @@ The CI/CD pipeline is set up to ensure that the code is tested and deployed auto
 - Docker Compose
 
 ### Execution Steps
-1. First, 
+```bash
+docker compose up
+```
+```bash
+alembic upgrade head
+```
+
+### Accessing the API
+Once the project is running, you can access the API documentation at: http://localhost:8000/
+
+[Go to page beginning](#swift_edge_ledger)
+### Testing Best Practices
+During development, it is recommended to follow best practices for testing, including:
+- Writing unit tests
+- Writing integration tests
+- Using Behave for behavior-driven development (BDD) tests
+
+This application uses the test pyramid approach, focusing on unit tests and acceptance tests, with a smaller number of acceptance tests.
+We are using pytest for unit tests and Behave for acceptance/BDD tests. The test suite is designed to ensure that the core functionality of the system is thoroughly tested.
+An BDD test example:
+```gherkin
+Feature: Account
+  As a user
+  I want to create an new account
+  So that I can manage my account balance and transactions
+
+  Scenario: Create a new account
+    Given I have a valid account creation request
+    When I send the request to create a new account
+    Then I should receive a response with status code 201
+    And the response should contain the account details
+    And the account should be created in the system
+
+  Scenario: Create an account with invalid data
+    Given I have an invalid account creation request
+    When I send the request to create a new account
+    Then I should receive a response with status code 400
+    And the response should contain an error message indicating the account validation failure
+
+  Scenario: Create an account with already existing account number
+    Given I have an account creation request with an existing account number
+    When I send the request to create a new account
+    Then I should receive a response with status code 409
+    And the response should contain an error message indicating that the account already exists
+```
+
+We have the other acceptance tests defined in the `src/tests/acceptance/features` directory, which cover various scenarios for accounts, merchants, and activities.
+
+### Code Coverage
+The code coverage is measured using Codecov, and the tests are expected to cover at least 80% of the codebase. The coverage report can be viewed on the Codecov dashboard: [Codecov Dashboard](https://codecov.io/gh/arthurgabriel73/swift_edge_ledger)
+
+### Extra
+I have defined some seeds in `src/main/shared/database/seeds`. This is to help you to test the application without having to create accounts, merchants, and activities manually. You can move the seeds to the migrations folder, **after running the actual migrations**, and run the seeds using the following command:
+```bash
+alembic upgrade head
+```
