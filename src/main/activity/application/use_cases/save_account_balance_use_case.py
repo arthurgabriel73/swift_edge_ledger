@@ -38,7 +38,6 @@ class SaveAccountBalanceUseCase(SaveAccountBalanceDriverPort):
             )
         )
         return SaveAccountBalanceCommandOutput(
-            account_balance_id=created_account_balance.id,
             account_id=created_account_balance.account_id,
             category_id=created_account_balance.category_id,
             amount_in_cents=created_account_balance.amount_in_cents

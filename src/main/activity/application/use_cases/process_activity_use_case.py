@@ -50,7 +50,10 @@ class ProcessActivityUseCase(ProcessActivityDriverPort):
         category_id = self._get_category_id(command)
         if not category_id:
             raise ValueError(f"Category not found for MCC '{command.mcc}' or Merchant '{command.merchant}'")
-        self._account_balance = self.account_balance_repository.find_by_account_and_category_id(command.account, category_id)
+        account_balance = self.account_balance_repository.find_by_account_and_category_id(command.account, category_id)
+        if not account_balance:
+            raise ValueError(f"Account balance not found for account '{command.account}' and category ID '{category_id}'")
+        self._account_balance = account_balance
 
     def _get_category_id(self, command: ProcessActivityCommand) -> Optional[int]:
         if command.merchant_priority:
