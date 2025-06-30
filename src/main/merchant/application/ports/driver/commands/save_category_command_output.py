@@ -1,5 +1,4 @@
 class SaveCategoryCommandOutput:
-    def __init__(self, category_id: int, code: str, description: str):
-        self.category_id = category_id
+    def __init__(self, code: str, description: str):
         self.code = code
         self.description = description
